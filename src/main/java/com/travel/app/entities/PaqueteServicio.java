@@ -1,0 +1,38 @@
+package com.travel.app.entities;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "paquete_servicio",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"id_paquete","id_servicio"}))
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PaqueteServicio {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "id_paquete", nullable = false)
+    private PaqueteTuristico paquete;
+
+    @ManyToOne
+    @JoinColumn(name = "id_servicio", nullable = false)
+    private Servicio servicio;
+
+    @Column(columnDefinition = "TINYINT DEFAULT 1")
+    private Integer activo = 1;
+
+    private Long idUsuarioCreador;
+    private Long idUsuarioModificador;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+}
