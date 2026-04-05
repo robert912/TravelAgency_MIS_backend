@@ -8,38 +8,44 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "servicio")
+@Table(name = "season")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Servicio {
+public class SeasonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String nombre;
+    private String name;
 
-    private String descripcion;
+    private String description;
 
     @Column(columnDefinition = "TINYINT DEFAULT 1")
-    private Integer activo = 1;
+    private Integer active = 1;
 
-    private Long idUsuarioCreador;
-    private Long idUsuarioModificador;
+    @Column(name = "created_by_user_id")
+    private Long createdByUserId;
 
+    @Column(name = "modified_by_user_id")
+    private Long modifiedByUserId;
+
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @PrePersist
-    void onCreate() {
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    void onUpdate() {
+    protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 }

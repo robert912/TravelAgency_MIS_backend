@@ -1,6 +1,6 @@
 package com.travel.app.enums;
 
-public enum EstadoReserva {
+public enum ReservationStatus {
     PENDIENTE,
     CONFIRMADA,
     CANCELADA,

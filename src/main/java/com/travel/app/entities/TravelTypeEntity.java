@@ -8,30 +8,29 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "rol")
+@Table(name = "travel_type")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Rol {
+public class TravelTypeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nombre", nullable = false)
-    private String nombre;
+    @Column(nullable = false)
+    private String name;
 
-    @Column(name = "descripcion")
-    private String descripcion;
+    private String description;
 
-    @Column(name = "activo", columnDefinition = "TINYINT DEFAULT 1")
-    private Integer activo = 1;
+    @Column(columnDefinition = "TINYINT DEFAULT 1")
+    private Integer active = 1;
 
-    @Column(name = "id_usuario_creador")
-    private Long idUsuarioCreador;
+    @Column(name = "created_by_user_id")
+    private Long createdByUserId;
 
-    @Column(name = "id_usuario_modificador")
-    private Long idUsuarioModificador;
+    @Column(name = "modified_by_user_id")
+    private Long modifiedByUserId;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

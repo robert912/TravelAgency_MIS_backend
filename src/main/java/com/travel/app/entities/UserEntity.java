@@ -8,23 +8,23 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // RELACIÓN ONE TO ONE
+    // ONE TO ONE RELATIONSHIP
     @OneToOne
-    @JoinColumn(name = "id_persona", nullable = false, unique = true)
-    private Persona persona;
+    @JoinColumn(name = "person_id", nullable = false, unique = true)
+    private PersonEntity person;
 
-    @Column(name = "usuario", nullable = false)
-    private String usuario;
+    @Column(name = "username", nullable = false)
+    private String username;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -32,17 +32,17 @@ public class Usuario {
     @Column(name = "salt")
     private String salt;
 
-    @Column(name = "intentos_fallidos", columnDefinition = "INT DEFAULT 3")
-    private Integer intentosFallidos = 3;
+    @Column(name = "failed_attempts", columnDefinition = "INT DEFAULT 3")
+    private Integer failedAttempts = 3;
 
-    @Column(name = "activo", columnDefinition = "TINYINT DEFAULT 1")
-    private Integer activo = 1;
+    @Column(name = "active", columnDefinition = "TINYINT DEFAULT 1")
+    private Integer active = 1;
 
-    @Column(name = "id_usuario_creador")
-    private Long idUsuarioCreador;
+    @Column(name = "created_by_user_id")
+    private Long createdByUserId;
 
-    @Column(name = "id_usuario_modificador")
-    private Long idUsuarioModificador;
+    @Column(name = "updated_by_user_id")
+    private Long updatedByUserId;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

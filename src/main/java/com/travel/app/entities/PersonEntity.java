@@ -4,53 +4,57 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(
-        name = "persona",
+        name = "persons",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "identificacion"),
+                @UniqueConstraint(columnNames = "identification"),
                 @UniqueConstraint(columnNames = "email")
         }
 )
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Persona {
+public class PersonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nombre", nullable = false)
-    private String nombre;
+    @Column(name = "full_name", nullable = false)
+    private String fullName;
 
-    @Column(name = "identificacion", nullable = false, unique = true)
-    private String identificacion;
+    @Column(name = "identification", nullable = false, unique = true)
+    private String identification;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "telefono")
-    private String telefono;
+    @Column(name = "phone")
+    private String phone;
 
-    @Column(name = "nacionalidad")
-    private String nacionalidad;
+    @Column(name = "nationality")
+    private String nationality;
 
-    @Column(name = "activo", columnDefinition = "TINYINT DEFAULT 1")
-    private Integer activo = 1;
+    @Column(name = "active", columnDefinition = "TINYINT DEFAULT 1")
+    private Integer active = 1;
 
-    // LADO INVERSO
-    @OneToOne(mappedBy = "persona")
-    private Usuario usuario;
+    // INVERSE SIDE OF RELATIONSHIP
+    @OneToOne(mappedBy = "person")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private UserEntity user;
 
-    @Column(name = "id_usuario_creador")
-    private Long idUsuarioCreador;
+    @Column(name = "created_by_user_id")
+    private Long createdByUserId;
 
-    @Column(name = "id_usuario_modificador")
-    private Long idUsuarioModificador;
+    @Column(name = "updated_by_user_id")
+    private Long updatedByUserId;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

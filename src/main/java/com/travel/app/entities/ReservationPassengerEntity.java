@@ -1,52 +1,48 @@
 package com.travel.app.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(
-        name = "rol_usuario",
+        name = "reservation_passenger",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"id_usuario", "id_rol"})
+                @UniqueConstraint(columnNames = {"reservation_id", "person_id"})
         }
 )
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RolUsuario {
+public class ReservationPassengerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 🔥 Relación con Usuario
-    @ManyToOne
-    @JoinColumn(name = "id_usuario", nullable = false)
+    // Associated reservation
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Usuario usuario;
+    private ReservationEntity reservation;
 
-    // 🔥 Relación con Rol
-    @ManyToOne
-    @JoinColumn(name = "id_rol", nullable = false)
+    // Person who travels
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "person_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Rol rol;
+    private PersonEntity person;
 
-    @Column(name = "activo", columnDefinition = "TINYINT DEFAULT 1")
-    private Integer activo = 1;
+    @Column(columnDefinition = "TINYINT DEFAULT 1")
+    private Integer active = 1;
 
-    @Column(name = "id_usuario_creador")
-    private Long idUsuarioCreador;
+    @Column(name = "created_by_user_id")
+    private Long createdByUserId;
 
-    @Column(name = "id_usuario_modificador")
-    private Long idUsuarioModificador;
+    @Column(name = "modified_by_user_id")
+    private Long modifiedByUserId;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
