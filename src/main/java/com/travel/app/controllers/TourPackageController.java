@@ -1,0 +1,52 @@
+package com.travel.app.controllers;
+
+import com.travel.app.entities.TourPackageEntity;
+import com.travel.app.services.TourPackageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/tour-packages")
+@CrossOrigin("*")
+public class TourPackageController {
+
+    @Autowired
+    TourPackageService tourPackageService;
+
+    @GetMapping("/")
+    public ResponseEntity<List<TourPackageEntity>> listTourPackages() {
+        List<TourPackageEntity> tourPackages = tourPackageService.getTourPackages();
+        return ResponseEntity.ok(tourPackages);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TourPackageEntity> getTourPackageById(@PathVariable Long id) {
+        TourPackageEntity tourPackage = tourPackageService.getTourPackageById(id);
+        return tourPackage != null ? ResponseEntity.ok(tourPackage) : ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<TourPackageEntity> saveTourPackage(@RequestBody TourPackageEntity tourPackage) {
+        TourPackageEntity newTourPackage = tourPackageService.saveTourPackage(tourPackage);
+        return ResponseEntity.ok(newTourPackage);
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<TourPackageEntity> updateTourPackage(@RequestBody TourPackageEntity tourPackage) {
+        TourPackageEntity updatedTourPackage = tourPackageService.updateTourPackage(tourPackage);
+        return ResponseEntity.ok(updatedTourPackage);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteTourPackageById(@PathVariable Long id) throws Exception {
+        boolean isDeactivated = tourPackageService.deleteTourPackage(id);
+        if (isDeactivated) {
+            return ResponseEntity.ok("Paquete turístico con ID " + id + " desactivado correctamente.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+}

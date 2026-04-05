@@ -39,8 +39,8 @@ public class UserRoleEntity {
     @EqualsAndHashCode.Exclude
     private RoleEntity role;
 
-    @Column(nullable = false)
-    private Boolean active = true;
+    @Column(columnDefinition = "TINYINT DEFAULT 1")
+    private Integer active = 1;
 
     @Column(name = "created_by_user_id")
     private Long createdByUserId;

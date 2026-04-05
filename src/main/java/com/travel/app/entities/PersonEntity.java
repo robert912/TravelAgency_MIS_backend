@@ -44,12 +44,6 @@ public class PersonEntity {
     @Column(name = "active", columnDefinition = "TINYINT DEFAULT 1")
     private Integer active = 1;
 
-    // INVERSE SIDE OF RELATIONSHIP
-    @OneToOne(mappedBy = "person")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private UserEntity user;
-
     @Column(name = "created_by_user_id")
     private Long createdByUserId;
 
