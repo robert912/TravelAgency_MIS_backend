@@ -63,6 +63,14 @@ public class TourPackageEntity {
     @Column(nullable = false)
     private PackageStatus status = PackageStatus.DISPONIBLE;
 
+    @Min(1)
+    @Max(5)
+    @Column(nullable = false)
+    private Integer stars;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(columnDefinition = "TINYINT DEFAULT 1")
     private Integer active = 1;
 
