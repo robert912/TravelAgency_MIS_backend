@@ -22,6 +22,12 @@ public class TravelTypeController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<List<TravelTypeEntity>> listTravelTypesActive() {
+        List<TravelTypeEntity> list = travelTypeService.getTravelTypesActive();
+        return ResponseEntity.ok(list);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<TravelTypeEntity> getById(@PathVariable Long id) {
         TravelTypeEntity travelType = travelTypeService.getTravelTypeById(id);

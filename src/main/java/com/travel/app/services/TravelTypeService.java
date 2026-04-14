@@ -13,8 +13,13 @@ public class TravelTypeService {
     @Autowired
     TravelTypeRepository travelTypeRepository;
 
-    // Listar solo tipos de viaje activos
+    // Listar todos tipos de viaje
     public List<TravelTypeEntity> getTravelTypes() {
+        return travelTypeRepository.findAll();
+    }
+
+    // Listar solo tipos de viaje activos
+    public List<TravelTypeEntity> getTravelTypesActive() {
         return travelTypeRepository.findByActive(1);
     }
 
@@ -26,7 +31,7 @@ public class TravelTypeService {
     // Buscar por ID (solo si está activo)
     public TravelTypeEntity getTravelTypeById(Long id) {
         TravelTypeEntity travelType = travelTypeRepository.findById(id).orElse(null);
-        if (travelType != null && travelType.getActive() == 1) {
+        if (travelType != null /*&& travelType.getActive() == 1*/) {
             return travelType;
         }
         return null;

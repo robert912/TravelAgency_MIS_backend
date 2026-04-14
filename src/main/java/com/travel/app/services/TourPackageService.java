@@ -5,6 +5,8 @@ import com.travel.app.repositories.TourPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -50,5 +52,10 @@ public class TourPackageService {
         } catch (Exception e) {
             throw new Exception("Error al desactivar el paquete turístico: " + e.getMessage());
         }
+    }
+
+    // Buscar Paquetes filtrados por destino, fechas de viaje, rango de precios, duración o tipo de experiencia.
+    public List<TourPackageEntity> filterTourPackages(String destination, BigDecimal minPrice, BigDecimal maxPrice, LocalDate startDate, LocalDate endDate, Long travelTypeId) {
+        return tourPackageRepository.findByFilters(destination, minPrice, maxPrice, startDate, endDate, travelTypeId);
     }
 }

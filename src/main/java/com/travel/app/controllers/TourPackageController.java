@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -26,6 +28,21 @@ public class TourPackageController {
     public ResponseEntity<TourPackageEntity> getTourPackageById(@PathVariable Long id) {
         TourPackageEntity tourPackage = tourPackageService.getTourPackageById(id);
         return tourPackage != null ? ResponseEntity.ok(tourPackage) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<TourPackageEntity>> searchPackages(
+            @RequestParam(required = false) String destination,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) Long travelTypeId
+    ) {
+        List<TourPackageEntity> filteredPackages = tourPackageService.filterTourPackages(
+                destination, minPrice, maxPrice, startDate, endDate, travelTypeId);
+
+        return ResponseEntity.ok(filteredPackages);
     }
 
     @PostMapping("/")
