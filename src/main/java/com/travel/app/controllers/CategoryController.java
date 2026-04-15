@@ -1,6 +1,7 @@
 package com.travel.app.controllers;
 
 import com.travel.app.entities.CategoryEntity;
+import com.travel.app.entities.SeasonEntity;
 import com.travel.app.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,13 @@ public class CategoryController {
 
     @GetMapping("/")
     public ResponseEntity<List<CategoryEntity>> listCategories() {
+        List<CategoryEntity> categories = categoryService.getCategories();
+        return ResponseEntity.ok(categories);
+    }
+
+
+    @GetMapping("/active")
+    public ResponseEntity<List<CategoryEntity>> listSeasonsActive() {
         List<CategoryEntity> categories = categoryService.getCategories();
         return ResponseEntity.ok(categories);
     }

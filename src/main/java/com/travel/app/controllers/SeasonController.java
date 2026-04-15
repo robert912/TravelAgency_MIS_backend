@@ -22,6 +22,12 @@ public class SeasonController {
         return ResponseEntity.ok(seasons);
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<List<SeasonEntity>> listSeasonsActive() {
+        List<SeasonEntity> seasons = seasonService.getSeasonsActive();
+        return ResponseEntity.ok(seasons);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<SeasonEntity> getSeasonById(@PathVariable Long id) {
         SeasonEntity season = seasonService.getSeasonById(id);

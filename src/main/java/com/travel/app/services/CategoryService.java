@@ -13,8 +13,13 @@ public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    // Obtener solo categorías activas (active = 1)
+    // Obtener todas las categorías
     public List<CategoryEntity> getCategories() {
+        return categoryRepository.findAll();
+    }
+
+    // Obtener solo categorías activas (active = 1)
+    public List<CategoryEntity> getCategoriesActive() {
         return categoryRepository.findByActive(1);
     }
 
@@ -26,7 +31,7 @@ public class CategoryService {
     // Obtener categoría por ID (solo si está activa)
     public CategoryEntity getCategoryById(Long id) {
         CategoryEntity category = categoryRepository.findById(id).orElse(null);
-        if (category != null && category.getActive() == 1) {
+        if (category != null /*&& category.getActive() == 1*/) {
             return category;
         }
         return null;

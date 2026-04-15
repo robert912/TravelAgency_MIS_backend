@@ -13,8 +13,13 @@ public class SeasonService {
     @Autowired
     SeasonRepository seasonRepository;
 
-    // Listar solo temporadas activas
+    // Listar todas las temporadas de viaje
     public List<SeasonEntity> getSeasons() {
+        return seasonRepository.findAll();
+    }
+
+    // Listar solo temporadas activas
+    public List<SeasonEntity> getSeasonsActive() {
         return seasonRepository.findByActive(1);
     }
 
@@ -26,7 +31,7 @@ public class SeasonService {
     // Buscar por ID (solo si está activa)
     public SeasonEntity getSeasonById(Long id) {
         SeasonEntity season = seasonRepository.findById(id).orElse(null);
-        if (season != null && season.getActive() == 1) {
+        if (season != null /*&& season.getActive() == 1*/) {
             return season;
         }
         return null;
