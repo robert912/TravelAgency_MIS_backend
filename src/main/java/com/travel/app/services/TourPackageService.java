@@ -15,8 +15,13 @@ public class TourPackageService {
     @Autowired
     TourPackageRepository tourPackageRepository;
 
-    // Listar solo paquetes turísticos activos
+    // Listar todos los paquetes turísticos
     public List<TourPackageEntity> getTourPackages() {
+        return tourPackageRepository.findAll();
+    }
+
+    // Listar solo paquetes turísticos activos
+    public List<TourPackageEntity> getTourPackagesActive() {
         return tourPackageRepository.findByActive(1);
     }
 

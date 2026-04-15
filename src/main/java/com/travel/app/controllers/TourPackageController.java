@@ -24,6 +24,12 @@ public class TourPackageController {
         return ResponseEntity.ok(tourPackages);
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<List<TourPackageEntity>> listTourPackagesActive() {
+        List<TourPackageEntity> tourPackages = tourPackageService.getTourPackagesActive();
+        return ResponseEntity.ok(tourPackages);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<TourPackageEntity> getTourPackageById(@PathVariable Long id) {
         TourPackageEntity tourPackage = tourPackageService.getTourPackageById(id);
