@@ -53,10 +53,8 @@ INSERT INTO tour_package ( id, name, destination, season_id, category_id, travel
 VALUES
 -- 🌴 Cancún
 ( 1, 'Viaje a Cancún Todo Incluido', 'México', 1, 2, 2, 'Vuelo + alojamiento + traslados. 8 días / 7 noches.', '2026-12-10', '2026-12-17', 850000, 20, 'DISPONIBLE', 5, '/cancun.png', 1, 1, 1, NOW(), NOW()),
-
 -- 🏝️ Punta Cana
 ( 2, 'Escapada Premium a Punta Cana', 'República Dominicana', 1, 2, 2, 'Vuelo + alojamiento todo incluido. 6 días / 5 noches.', '2026-11-05', '2026-11-10', 920000, 15, 'DISPONIBLE', 5, '/punta_cana.png', 1, 1, 1, NOW(), NOW()),
-
 -- 🇧🇷 Río de Janeiro
 ( 3, 'Aventura en Río de Janeiro', 'Brasil', 3,  1,  3, 'Vuelo + hotel con desayuno incluido. 5 días / 4 noches.', '2026-10-01', '2026-10-05', 450000, 25, 'DISPONIBLE', 4, '/rio.png', 1, 1, 1, NOW(), NOW());
  ```
