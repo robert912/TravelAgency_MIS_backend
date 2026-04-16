@@ -1,5 +1,6 @@
 package com.travel.app.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class TourPackageRestrictionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonBackReference //No vuelvas a mostrar el paquete desde aquí
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tour_package_id", nullable = false)
     private TourPackageEntity tourPackage;

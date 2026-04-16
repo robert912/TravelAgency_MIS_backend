@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/conditions")
+@RequestMapping("/api/conditions")
 @CrossOrigin("*")
 public class ConditionController {
 
@@ -19,6 +19,12 @@ public class ConditionController {
     @GetMapping("/")
     public ResponseEntity<List<ConditionEntity>> listConditions() {
         List<ConditionEntity> conditions = conditionService.getConditions();
+        return ResponseEntity.ok(conditions);
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<ConditionEntity>> listConditionsActive() {
+        List<ConditionEntity> conditions = conditionService.getConditionsActive();
         return ResponseEntity.ok(conditions);
     }
 

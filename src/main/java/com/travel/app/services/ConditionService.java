@@ -13,8 +13,13 @@ public class ConditionService {
     @Autowired
     ConditionRepository conditionRepository;
 
-    // Obtener solo condiciones activas
+    // Obtener todas las condiciones
     public List<ConditionEntity> getConditions() {
+        return conditionRepository.findAll();
+    }
+
+    // Obtener solo condiciones activas
+    public List<ConditionEntity> getConditionsActive() {
         return conditionRepository.findByActive(1);
     }
 
@@ -26,7 +31,7 @@ public class ConditionService {
     // Obtener condición por ID (solo si está activa)
     public ConditionEntity getConditionById(Long id) {
         ConditionEntity condition = conditionRepository.findById(id).orElse(null);
-        if (condition != null && condition.getActive() == 1) {
+        if (condition != null) {
             return condition;
         }
         return null;

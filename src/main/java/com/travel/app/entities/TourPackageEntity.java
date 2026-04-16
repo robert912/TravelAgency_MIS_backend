@@ -1,5 +1,7 @@
 package com.travel.app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.travel.app.enums.PackageStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -8,6 +10,8 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 
 @Entity
 @Table(name = "tour_package")
@@ -104,4 +108,16 @@ public class TourPackageEntity {
             throw new IllegalArgumentException("End date must be greater than start date");
         }
     }
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "tourPackage", cascade = CascadeType.ALL)
+    private List<TourPackageConditionEntity> conditions;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "tourPackage", cascade = CascadeType.ALL)
+    private List<TourPackageRestrictionEntity> restrictions;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "tourPackage", cascade = CascadeType.ALL)
+    private List<TourPackageServiceEntity> services;
 }
