@@ -6,6 +6,7 @@ import com.travel.app.enums.PackageStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -111,13 +112,16 @@ public class TourPackageEntity {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "tourPackage", cascade = CascadeType.ALL)
+    @SQLRestriction("active = 1")
     private List<TourPackageConditionEntity> conditions;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "tourPackage", cascade = CascadeType.ALL)
+    @SQLRestriction("active = 1")
     private List<TourPackageRestrictionEntity> restrictions;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "tourPackage", cascade = CascadeType.ALL)
+    @SQLRestriction("active = 1")
     private List<TourPackageServiceEntity> services;
 }
