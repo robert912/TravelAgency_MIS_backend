@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/tour-package-services")
@@ -14,39 +15,33 @@ import java.util.List;
 public class TourPackageServiceController {
 
     @Autowired
-    TourPackageServiceService tourPackageServiceService;
+    private TourPackageServiceService tourPackageServiceService;
 
-    @GetMapping("/")
-    public ResponseEntity<List<TourPackageServiceEntity>> listAll() {
-        List<TourPackageServiceEntity> list = tourPackageServiceService.getTourPackageServices();
-        return ResponseEntity.ok(list);
+    // Obtener servicios activos de un paquete específico
+    @GetMapping("/package/{packageId}/active")
+    public ResponseEntity<List<TourPackageServiceEntity>> getActiveByPackageId(@PathVariable Long packageId) {
+        return ResponseEntity.ok(tourPackageServiceService.getActiveServicesByPackageId(packageId));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TourPackageServiceEntity> getById(@PathVariable Long id) {
-        TourPackageServiceEntity tps = tourPackageServiceService.getTourPackageServiceById(id);
-        return tps != null ? ResponseEntity.ok(tps) : ResponseEntity.notFound().build();
+    // Obtener todos los servicios de un paquete (activos e inactivos)
+    @GetMapping("/package/{packageId}/all")
+    public ResponseEntity<List<TourPackageServiceEntity>> getAllByPackageId(@PathVariable Long packageId) {
+        return ResponseEntity.ok(tourPackageServiceService.getAllServicesByPackageId(packageId));
     }
 
-    @PostMapping("/")
-    public ResponseEntity<TourPackageServiceEntity> save(@RequestBody TourPackageServiceEntity tps) {
-        TourPackageServiceEntity newTps = tourPackageServiceService.saveTourPackageService(tps);
-        return ResponseEntity.ok(newTps);
-    }
+    // Endpoint para sincronizar servicios
+    @PutMapping("/package/{packageId}/sync")
+    public ResponseEntity<Map<String, Boolean>> syncServices(
+            @PathVariable Long packageId,
+            @RequestBody Map<String, List<Long>> request,
+            @RequestParam(defaultValue = "1") Long userId) {
 
-    @PutMapping("/")
-    public ResponseEntity<TourPackageServiceEntity> update(@RequestBody TourPackageServiceEntity tps) {
-        TourPackageServiceEntity updatedTps = tourPackageServiceService.updateTourPackageService(tps);
-        return ResponseEntity.ok(updatedTps);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-        boolean isDeactivated = tourPackageServiceService.deleteTourPackageService(id);
-        if (isDeactivated) {
-            return ResponseEntity.ok("Servicio de paquete con ID " + id + " desactivado correctamente.");
-        } else {
-            return ResponseEntity.notFound().build();
+        List<Long> serviceIds = request.get("serviceIds");
+        if (serviceIds == null) {
+            return ResponseEntity.badRequest().build();
         }
+
+        tourPackageServiceService.syncPackageServices(packageId, serviceIds, userId);
+        return ResponseEntity.ok(Map.of("success", true));
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/tour-package-conditions")
@@ -14,39 +15,33 @@ import java.util.List;
 public class TourPackageConditionController {
 
     @Autowired
-    TourPackageConditionService tourPackageConditionService;
+    private TourPackageConditionService tourPackageConditionService;
 
-    @GetMapping("/")
-    public ResponseEntity<List<TourPackageConditionEntity>> listAll() {
-        List<TourPackageConditionEntity> list = tourPackageConditionService.getTourPackageConditions();
-        return ResponseEntity.ok(list);
+    // Obtener condiciones activas de un paquete específico
+    @GetMapping("/package/{packageId}/active")
+    public ResponseEntity<List<TourPackageConditionEntity>> getActiveByPackageId(@PathVariable Long packageId) {
+        return ResponseEntity.ok(tourPackageConditionService.getActiveConditionsByPackageId(packageId));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TourPackageConditionEntity> getById(@PathVariable Long id) {
-        TourPackageConditionEntity tpc = tourPackageConditionService.getTourPackageConditionById(id);
-        return tpc != null ? ResponseEntity.ok(tpc) : ResponseEntity.notFound().build();
+    // Obtener todas las condiciones de un paquete
+    @GetMapping("/package/{packageId}/all")
+    public ResponseEntity<List<TourPackageConditionEntity>> getAllByPackageId(@PathVariable Long packageId) {
+        return ResponseEntity.ok(tourPackageConditionService.getAllConditionsByPackageId(packageId));
     }
 
-    @PostMapping("/")
-    public ResponseEntity<TourPackageConditionEntity> save(@RequestBody TourPackageConditionEntity tpc) {
-        TourPackageConditionEntity newTpc = tourPackageConditionService.saveTourPackageCondition(tpc);
-        return ResponseEntity.ok(newTpc);
-    }
+    // Endpoint para sincronizar condiciones
+    @PutMapping("/package/{packageId}/sync")
+    public ResponseEntity<Void> syncConditions(
+            @PathVariable Long packageId,
+            @RequestBody Map<String, List<Long>> request,
+            @RequestParam(defaultValue = "1") Long userId) {
 
-    @PutMapping("/")
-    public ResponseEntity<TourPackageConditionEntity> update(@RequestBody TourPackageConditionEntity tpc) {
-        TourPackageConditionEntity updatedTpc = tourPackageConditionService.updateTourPackageCondition(tpc);
-        return ResponseEntity.ok(updatedTpc);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-        boolean isDeactivated = tourPackageConditionService.deleteTourPackageCondition(id);
-        if (isDeactivated) {
-            return ResponseEntity.ok("Condición de paquete con ID " + id + " desactivada correctamente.");
-        } else {
-            return ResponseEntity.notFound().build();
+        List<Long> conditionIds = request.get("conditionIds");
+        if (conditionIds == null) {
+            return ResponseEntity.badRequest().build();
         }
+
+        tourPackageConditionService.syncPackageConditions(packageId, conditionIds, userId);
+        return ResponseEntity.ok().build();
     }
 }

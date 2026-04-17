@@ -7,46 +7,41 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/tour-package-restrictions")
+@RequestMapping("/api/tour-package-restrictions")
 @CrossOrigin("*")
 public class TourPackageRestrictionController {
 
     @Autowired
-    TourPackageRestrictionService tourPackageRestrictionService;
+    private TourPackageRestrictionService tourPackageRestrictionService;
 
-    @GetMapping("/")
-    public ResponseEntity<List<TourPackageRestrictionEntity>> listAll() {
-        List<TourPackageRestrictionEntity> list = tourPackageRestrictionService.getTourPackageRestrictions();
-        return ResponseEntity.ok(list);
+    // Obtener restricciones activas de un paquete específico
+    @GetMapping("/package/{packageId}/active")
+    public ResponseEntity<List<TourPackageRestrictionEntity>> getActiveByPackageId(@PathVariable Long packageId) {
+        return ResponseEntity.ok(tourPackageRestrictionService.getActiveRestrictionsByPackageId(packageId));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TourPackageRestrictionEntity> getById(@PathVariable Long id) {
-        TourPackageRestrictionEntity tpr = tourPackageRestrictionService.getTourPackageRestrictionById(id);
-        return tpr != null ? ResponseEntity.ok(tpr) : ResponseEntity.notFound().build();
+    // Obtener todas las restricciones de un paquete (activas e inactivas)
+    @GetMapping("/package/{packageId}/all")
+    public ResponseEntity<List<TourPackageRestrictionEntity>> getAllByPackageId(@PathVariable Long packageId) {
+        return ResponseEntity.ok(tourPackageRestrictionService.getAllRestrictionsByPackageId(packageId));
     }
 
-    @PostMapping("/")
-    public ResponseEntity<TourPackageRestrictionEntity> save(@RequestBody TourPackageRestrictionEntity tpr) {
-        TourPackageRestrictionEntity newTpr = tourPackageRestrictionService.saveTourPackageRestriction(tpr);
-        return ResponseEntity.ok(newTpr);
-    }
+    // Endpoint para sincronizar restricciones
+    @PutMapping("/package/{packageId}/sync")
+    public ResponseEntity<Map<String, Boolean>> syncRestrictions(
+            @PathVariable Long packageId,
+            @RequestBody Map<String, List<Long>> request,
+            @RequestParam(defaultValue = "1") Long userId) {
 
-    @PutMapping("/")
-    public ResponseEntity<TourPackageRestrictionEntity> update(@RequestBody TourPackageRestrictionEntity tpr) {
-        TourPackageRestrictionEntity updatedTpr = tourPackageRestrictionService.updateTourPackageRestriction(tpr);
-        return ResponseEntity.ok(updatedTpr);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-        boolean isDeactivated = tourPackageRestrictionService.deleteTourPackageRestriction(id);
-        if (isDeactivated) {
-            return ResponseEntity.ok("Restricción de paquete con ID " + id + " desactivada correctamente.");
-        } else {
-            return ResponseEntity.notFound().build();
+        List<Long> restrictionIds = request.get("restrictionIds");
+        if (restrictionIds == null) {
+            return ResponseEntity.badRequest().build();
         }
+
+        tourPackageRestrictionService.syncPackageRestrictions(packageId, restrictionIds, userId);
+        return ResponseEntity.ok(Map.of("success", true));
     }
 }

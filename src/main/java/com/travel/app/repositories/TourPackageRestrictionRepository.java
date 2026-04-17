@@ -9,4 +9,10 @@ import java.util.List;
 @Repository
 public interface TourPackageRestrictionRepository extends JpaRepository<TourPackageRestrictionEntity,Long> {
     List<TourPackageRestrictionEntity> findByActive(Integer active);
+
+    // Buscar por ID de paquete
+    List<TourPackageRestrictionEntity> findByTourPackageId(Long tourPackageId);
+
+    // Buscar por ID de paquete y estado activo
+    List<TourPackageRestrictionEntity> findByTourPackageIdAndActive(Long tourPackageId, Integer active);
 }
