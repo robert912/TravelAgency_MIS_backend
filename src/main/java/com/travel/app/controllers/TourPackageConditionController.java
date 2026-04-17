@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/tour-package-conditions")
+@RequestMapping("/api/tour-package-conditions")
 @CrossOrigin("*")
 public class TourPackageConditionController {
 

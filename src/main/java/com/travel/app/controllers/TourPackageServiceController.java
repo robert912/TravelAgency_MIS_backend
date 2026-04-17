@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/tour-package-services")
+@RequestMapping("/api/tour-package-services")
 @CrossOrigin("*")
 public class TourPackageServiceController {
 
