@@ -15,6 +15,11 @@ public class ServiceService {
 
     // Listar solo servicios activos
     public List<ServiceEntity> getServices() {
+        return serviceRepository.findAll();
+    }
+
+    // Listar solo servicios activos
+    public List<ServiceEntity> getServicesActive() {
         return serviceRepository.findByActive(1);
     }
 

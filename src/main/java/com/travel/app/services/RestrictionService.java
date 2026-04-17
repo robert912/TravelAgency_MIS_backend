@@ -13,8 +13,13 @@ public class RestrictionService {
     @Autowired
     RestrictionRepository restrictionRepository;
 
-    // Obtener solo restricciones activas (active = 1)
+    // Obtener todas las restricciones
     public List<RestrictionEntity> getRestrictions() {
+        return restrictionRepository.findAll();
+    }
+
+    // Obtener solo restricciones activas (active = 1)
+    public List<RestrictionEntity> getRestrictionsActive() {
         return restrictionRepository.findByActive(1);
     }
 
@@ -25,11 +30,7 @@ public class RestrictionService {
 
     // Obtener restricción por ID (solo si está activa)
     public RestrictionEntity getRestrictionById(Long id) {
-        RestrictionEntity restriction = restrictionRepository.findById(id).orElse(null);
-        if (restriction != null && restriction.getActive() == 1) {
-            return restriction;
-        }
-        return null;
+        return restrictionRepository.findById(id).orElse(null);
     }
 
     // Actualizar restricción

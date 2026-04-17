@@ -22,6 +22,12 @@ public class RestrictionController {
         return ResponseEntity.ok(restrictions);
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<List<RestrictionEntity>> listRestrictionsActive() {
+        List<RestrictionEntity> restrictions = restrictionService.getRestrictionsActive();
+        return ResponseEntity.ok(restrictions);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RestrictionEntity> getRestrictionById(@PathVariable Long id) {
         RestrictionEntity restriction = restrictionService.getRestrictionById(id);
