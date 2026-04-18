@@ -1,7 +1,6 @@
 package com.travel.app.services;
 
 import com.travel.app.entities.PaymentEntity;
-import com.travel.app.entities.UserEntity;
 import com.travel.app.repositories.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

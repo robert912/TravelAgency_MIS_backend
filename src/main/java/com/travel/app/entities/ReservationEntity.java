@@ -18,8 +18,8 @@ public class ReservationEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    @JoinColumn(name = "person_id", nullable = false)
+    private PersonEntity person;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tour_package_id", nullable = false)

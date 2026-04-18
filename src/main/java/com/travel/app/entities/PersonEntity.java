@@ -41,6 +41,9 @@ public class PersonEntity {
     @Column(name = "nationality")
     private String nationality;
 
+    @Column(name = "failed_attempts", columnDefinition = "INT DEFAULT 3")
+    private Integer failedAttempts = 3;
+
     @Column(name = "active", columnDefinition = "TINYINT DEFAULT 1")
     private Integer active = 1;
 
