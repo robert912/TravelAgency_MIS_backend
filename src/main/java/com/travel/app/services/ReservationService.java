@@ -57,12 +57,38 @@ public class ReservationService {
 
         try {
             ReservationStatus newStatus = ReservationStatus.valueOf(status);
+            ReservationStatus oldStatus = reservation.getStatus();
+
+            // Validar transiciones permitidas
+            if (!isValidStatusTransition(oldStatus, newStatus)) {
+                throw new RuntimeException(
+                        String.format("No se puede cambiar de %s a %s", oldStatus, newStatus)
+                );
+            }
+
+            // Actualizar estado (NO necesitas modificar el paquete)
             reservation.setStatus(newStatus);
             reservation.setModifiedByUserId(userId);
             reservation.setUpdatedAt(LocalDateTime.now());
+
             return reservationRepository.save(reservation);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Estado inválido: " + status);
+        }
+    }
+    private boolean isValidStatusTransition(ReservationStatus oldStatus, ReservationStatus newStatus) {
+        switch (oldStatus) {
+            case PENDIENTE:
+                return newStatus == ReservationStatus.PAGADA ||
+                        newStatus == ReservationStatus.CANCELADA ||
+                        newStatus == ReservationStatus.EXPIRADA;
+            case PAGADA:
+                return newStatus == ReservationStatus.CANCELADA;
+            case CANCELADA:
+            case EXPIRADA:
+                return false;
+            default:
+                return false;
         }
     }
 
@@ -75,9 +101,13 @@ public class ReservationService {
             throw new RuntimeException("Paquete turístico no encontrado");
         }
 
-        // Validar cupos disponibles
-        if (tourPackage.getTotalSlots() < request.getPassengers()) {
-            throw new RuntimeException("No hay suficientes cupos disponibles");
+        // VALIDAR CUPOS DISPONIBLES DINÁMICAMENTE (sin modificar el paquete)
+        int availableSlots = getAvailableSlotsForPackage(tourPackage.getId());
+        if (availableSlots < request.getPassengers()) {
+            throw new RuntimeException(
+                    String.format("No hay suficientes cupos disponibles. Cupos disponibles: %d, Solicitados: %d",
+                            availableSlots, request.getPassengers())
+            );
         }
 
         // Obtener o crear la persona principal
@@ -191,11 +221,22 @@ public class ReservationService {
             reservationPassengerRepository.save(mainReservationPassenger);
         }
 
-        // Descontar cupos
-        tourPackage.setTotalSlots(tourPackage.getTotalSlots() - request.getPassengers());
-        tourPackageService.updateTourPackage(tourPackage);
-
         return savedReservation;
+    }
+    // Método auxiliar para calcular cupos disponibles dinámicamente
+    private int getAvailableSlotsForPackage(Long packageId) {
+        TourPackageEntity tourPackage = tourPackageService.getTourPackageById(packageId);
+        if (tourPackage == null || tourPackage.getTotalSlots() == null) {
+            return 0;
+        }
+
+        // Contar pasajeros en reservas PENDIENTE y PAGADA
+        Integer reservedPassengers = reservationRepository.countConfirmedPassengersByPackageId(packageId);
+        if (reservedPassengers == null) {
+            reservedPassengers = 0;
+        }
+
+        return tourPackage.getTotalSlots() - reservedPassengers;
     }
 
     // Método para guardar reserva (compatible con el controller existente)
@@ -277,5 +318,10 @@ public class ReservationService {
     // Obtener pasajeros de una reserva
     public List<ReservationPassengerEntity> getPassengersByReservationId(Long reservationId) {
         return reservationPassengerRepository.findByReservationIdAndActive(reservationId, 1);
+    }
+
+    // En ReservationService.java
+    public int countConfirmedPassengersByPackageId(Long packageId) {
+        return reservationRepository.countConfirmedPassengersByPackageId(packageId);
     }
 }

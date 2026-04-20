@@ -1,6 +1,7 @@
 package com.travel.app.controllers;
 
 import com.travel.app.entities.TourPackageEntity;
+import com.travel.app.services.ReservationService;
 import com.travel.app.services.TourPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/tour-packages")
@@ -17,6 +20,9 @@ public class TourPackageController {
 
     @Autowired
     TourPackageService tourPackageService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @GetMapping("/")
     public ResponseEntity<List<TourPackageEntity>> listTourPackages() {
@@ -71,5 +77,64 @@ public class TourPackageController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // Endpoint para consultar disponibilidad de un paquete
+    @GetMapping("/{packageId}/availability")
+    public ResponseEntity<Map<String, Object>> checkAvailability(@PathVariable Long packageId) {
+        TourPackageEntity tourPackage = tourPackageService.getTourPackageById(packageId);
+        if (tourPackage == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        int totalSlots = tourPackage.getTotalSlots() != null ? tourPackage.getTotalSlots() : 0;
+        int reservedSlots = reservationService.countConfirmedPassengersByPackageId(packageId);
+        int availableSlots = totalSlots - reservedSlots;
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("totalSlots", totalSlots);
+        response.put("reservedSlots", reservedSlots);
+        response.put("availableSlots", availableSlots);
+        response.put("isAvailable", availableSlots > 0);
+        response.put("packageName", tourPackage.getName());
+        response.put("destination", tourPackage.getDestination());
+
+        return ResponseEntity.ok(response);
+    }
+
+    // Endpoint para verificar si se puede reservar una cantidad específica
+    @GetMapping("/{packageId}/availability/check")
+    public ResponseEntity<Map<String, Object>> checkAvailabilityForQuantity(
+            @PathVariable Long packageId,
+            @RequestParam int quantity) {
+
+        TourPackageEntity tourPackage = tourPackageService.getTourPackageById(packageId);
+        if (tourPackage == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        int totalSlots = tourPackage.getTotalSlots() != null ? tourPackage.getTotalSlots() : 0;
+        int reservedSlots = reservationService.countConfirmedPassengersByPackageId(packageId);
+        int availableSlots = totalSlots - reservedSlots;
+// 🔥 LOGS PARA DEPURAR
+        System.out.println("=== DEBUG DISPONIBILIDAD ===");
+        System.out.println("Package ID: " + packageId);
+        System.out.println("Total Slots: " + totalSlots);
+        System.out.println("Reserved Slots: " + reservedSlots);
+        System.out.println("Available Slots: " + availableSlots);
+        System.out.println("Requested Quantity: " + quantity);
+        System.out.println("===========================");
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("totalSlots", totalSlots);
+        response.put("reservedSlots", reservedSlots);
+        response.put("availableSlots", availableSlots);
+        response.put("requestedQuantity", quantity);
+        response.put("isAvailable", availableSlots >= quantity);
+        response.put("message", availableSlots >= quantity ?
+                "Hay suficientes cupos disponibles" :
+                String.format("Solo hay %d cupos disponibles de %d solicitados", availableSlots, quantity));
+
+        return ResponseEntity.ok(response);
     }
 }
