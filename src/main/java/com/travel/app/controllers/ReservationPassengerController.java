@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reservation-passengers")
+@RequestMapping("/api/reservation-passengers")
 @CrossOrigin("*")
 public class ReservationPassengerController {
 

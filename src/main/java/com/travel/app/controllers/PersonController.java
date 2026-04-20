@@ -22,10 +22,26 @@ public class PersonController {
         return ResponseEntity.ok(persons);
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<List<PersonEntity>> listPersonsActive() {
+        List<PersonEntity> persons = personService.getPersonsActive();
+        return ResponseEntity.ok(persons);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<PersonEntity> getPersonById(@PathVariable Long id) {
         PersonEntity person = personService.getPersonById(id);
         return person != null ? ResponseEntity.ok(person) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchPerson(@RequestParam String identification) {
+        PersonEntity person = personService.findByIdentification(identification);
+        if (person != null) {
+            return ResponseEntity.ok(person);
+        } else {
+            return ResponseEntity.ok(null);
+        }
     }
 
     @PostMapping("/")

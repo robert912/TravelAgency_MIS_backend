@@ -18,6 +18,16 @@ public class PersonService {
         return (List<PersonEntity>) personRepository.findAll();
     }
 
+    // Obtener todas las personas
+    public List<PersonEntity> getPersonsActive() {
+        return (List<PersonEntity>) personRepository.findByActive(1);
+    }
+
+    // Obtener persona por rut
+    public PersonEntity findByIdentification(String identification) {
+        return personRepository.findByIdentificationAndActive(identification, 1);
+    }
+
     // Guardar una persona
     public PersonEntity savePerson(PersonEntity person) {
         return personRepository.save(person);

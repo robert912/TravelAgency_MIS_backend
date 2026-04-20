@@ -4,6 +4,7 @@ import com.travel.app.enums.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -35,6 +36,25 @@ public class ReservationEntity {
     @Column(nullable = false)
     private ReservationStatus status = ReservationStatus.PENDIENTE;
 
+    // Nuevos campos para precios y descuentos
+    @Column(name = "subtotal", precision = 10, scale = 2)
+    private BigDecimal subtotal;
+
+    @Column(name = "total_amount", precision = 10, scale = 2)
+    private BigDecimal totalAmount;
+
+    @Column(name = "discount_amount", precision = 10, scale = 2)
+    private BigDecimal discountAmount;
+
+    @Column(name = "discount_details", columnDefinition = "TEXT")
+    private String discountDetails; // JSON con detalles de descuentos
+
+    @Column(name = "passengers_count")
+    private Integer passengersCount = 1;
+
+    @Column(name = "solicitudes", columnDefinition = "TEXT")
+    private String solicitudes;
+
     @Column(columnDefinition = "TINYINT DEFAULT 1")
     private Integer active = 1;
 
@@ -49,10 +69,6 @@ public class ReservationEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    // Inverse relationship
-    @OneToOne(mappedBy = "reservation", fetch = FetchType.LAZY)
-    private PaymentEntity payment;
 
     @PrePersist
     protected void onCreate() {

@@ -52,7 +52,7 @@ INSERT IGNORE  INTO conditions (id, name, description, active, created_at) VALUE
 (1, 'Cancelación flexible', 'Cancelación sin costo hasta 48 horas antes', 1, NOW()),
 (2, 'No reembolsable', 'No se realizan devoluciones', 1, NOW()),
 (3, 'Incluye equipaje', 'Incluye 1 maleta de 23kg', 1, NOW()),
-(4, 'No incluye equipaje', 'No incluye equipaje en bodega', 1, NOW()),
+(4, 'No incluye bodega', 'No incluye equipaje en bodega', 1, NOW()),
 (5, 'Incluye desayuno', 'Incluye desayuno diario', 1, NOW()),
 (6, 'No incluye alimentación', 'No incluye comidas', 1, NOW()),
 (7, 'Apto para todo público', 'Sin restricciones de edad', 1, NOW()),
@@ -193,3 +193,8 @@ INSERT IGNORE INTO `tour_package_service` (`id`, `tour_package_id`, `service_id`
 (NULL, 3, 7, 1, 1, 1, NOW(), NOW()),  -- Tours guiados
 (NULL, 3, 8, 1, 1, 1, NOW(), NOW()),  -- Entradas a atracciones
 (NULL, 3, 10, 1, 1, 1, NOW(), NOW()); -- Asistencia 24/7
+
+
+INSERT IGNORE INTO persons (id, full_name, identification, email, phone, nationality, failed_attempts, active, created_by_user_id, updated_by_user_id, created_at, updated_at) VALUES
+(1, 'Roberto Orellana Tamayo', '17411947-3', 'roberto.orellana.t@usach.cl', '974331446', 'Chilena', 3, 1, 1, 1, '2026-04-18 05:28:44.096003', '2026-04-18 05:28:44.096003'),
+(2, 'María Fernanda López González', '20567890-5', 'maria.lopez@travelapp.com', '987654321', 'Chilena', 0, 1, 1, 1,'2026-04-18 10:15:00.000000','2026-04-18 10:15:00.000000');
