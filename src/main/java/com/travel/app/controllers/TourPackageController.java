@@ -19,7 +19,7 @@ import java.util.Map;
 public class TourPackageController {
 
     @Autowired
-    TourPackageService tourPackageService;
+    private TourPackageService tourPackageService;
 
     @Autowired
     private ReservationService reservationService;

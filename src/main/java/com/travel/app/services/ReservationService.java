@@ -7,6 +7,7 @@ import com.travel.app.repositories.ReservationPassengerRepository;
 import com.travel.app.repositories.ReservationRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class ReservationService {
     private PersonService personService;
 
     @Autowired
+    @Lazy
     private TourPackageService tourPackageService;
 
     // Obtener todas las reservas
