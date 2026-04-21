@@ -84,7 +84,7 @@ public class TourPackageService {
      */
     private PackageStatus calculateAutomaticStatus(TourPackageEntity pkg) {
         // Regla 1: Verificar si la fecha ya venció
-        if (isDateExpired(pkg.getEndDate())) {
+        if (isDateExpired(pkg.getStartDate())) {
             return PackageStatus.NO_VIGENTE;
         }
 
@@ -101,10 +101,10 @@ public class TourPackageService {
     /**
      * Verifica si una fecha ya expiró
      */
-    private boolean isDateExpired(LocalDate endDate) {
-        if (endDate == null) return false;
+    private boolean isDateExpired(LocalDate startDate) {
+        if (startDate == null) return false;
         LocalDate today = LocalDate.now();
-        return endDate.isBefore(today);
+        return !startDate.isAfter(today);
     }
 
     /**
