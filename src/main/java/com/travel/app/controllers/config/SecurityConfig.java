@@ -31,7 +31,9 @@ public class SecurityConfig {
                 // 2. Deshabilita CSRF para APIs REST
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/api/tour-packages/active").permitAll()
+                        .requestMatchers("/api/tour-packages/{id}").permitAll()
+                        .requestMatchers("/api/tour-packages/{id}/availability").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated()
                 )
