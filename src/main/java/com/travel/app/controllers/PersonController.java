@@ -35,8 +35,15 @@ public class PersonController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchPerson(@RequestParam String identification) {
-        PersonEntity person = personService.findByIdentification(identification);
+    public ResponseEntity<?> searchPerson(@RequestParam String query) {
+        // Intentar buscar por identificación primero
+        PersonEntity person = personService.findByIdentification(query);
+
+        // Si no se encuentra, buscar por email
+        if (person == null) {
+            person = personService.findByEmail(query);
+        }
+
         if (person != null) {
             return ResponseEntity.ok(person);
         } else {

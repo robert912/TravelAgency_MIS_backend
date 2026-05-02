@@ -25,7 +25,12 @@ public class PersonService {
 
     // Obtener persona por rut
     public PersonEntity findByIdentification(String identification) {
-        return personRepository.findByIdentificationAndActive(identification, 1);
+        return personRepository.findByIdentification(identification, 1);
+    }
+
+    // Obtener persona por rut
+    public PersonEntity findByEmail(String identification) {
+        return personRepository.findByEmail(identification, 1);
     }
 
     // Guardar una persona

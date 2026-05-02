@@ -12,5 +12,8 @@ public interface PersonRepository extends JpaRepository<PersonEntity,Long> {
     List<PersonEntity> findByActive(Integer active);
 
     // devuelve persona por identificacion (rut u otro)
-    PersonEntity findByIdentificationAndActive(String identification, Integer active);
+    PersonEntity findByIdentification(String identification, Integer active);
+
+    // devuelve persona por email
+    PersonEntity findByEmail(String email, Integer active);
 }

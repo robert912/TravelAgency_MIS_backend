@@ -140,7 +140,7 @@ public class TourPackageService {
     // Buscar por ID (solo si está activo)
     public TourPackageEntity getTourPackageById(Long id) {
         TourPackageEntity tourPackage = tourPackageRepository.findById(id).orElse(null);
-        if (tourPackage != null && tourPackage.getActive() == 1) {
+        if (tourPackage != null) {// && tourPackage.getActive() == 1) {
             return tourPackage;
         }
         return null;
