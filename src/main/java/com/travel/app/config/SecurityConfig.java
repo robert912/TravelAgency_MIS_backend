@@ -1,4 +1,4 @@
-package com.travel.app.controllers.config;
+package com.travel.app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
