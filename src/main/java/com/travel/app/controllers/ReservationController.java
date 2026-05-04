@@ -106,7 +106,7 @@ public class ReservationController {
         }
     }
 
-    @PatchMapping("/{id}/status")
+    @PutMapping("/{id}/status")
     public ResponseEntity<ReservationEntity> changeStatus(
             @PathVariable Long id,
             @RequestParam String status,
