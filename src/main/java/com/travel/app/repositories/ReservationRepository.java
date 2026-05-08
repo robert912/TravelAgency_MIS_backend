@@ -41,8 +41,8 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
                 tourPackage.name,
                 tourPackage.destination,
                 COALESCE(r.passengersCount, 0),
+                COALESCE(r.subtotal, 0),
                 COALESCE(r.totalAmount, 0),
-                COALESCE(p.amount, 0),
                 r.status
             )
             FROM ReservationEntity r
@@ -50,7 +50,7 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
             JOIN r.tourPackage tourPackage
             LEFT JOIN PaymentEntity p ON p.reservation = r
             WHERE r.active = 1
-              AND r.status <> com.travel.app.enums.ReservationStatus.CANCELADA
+              AND r.status = com.travel.app.enums.ReservationStatus.PAGADA
               AND (
                     r.reservationDate BETWEEN :startDate AND :endDate
                     OR p.createdAt BETWEEN :startDate AND :endDate
@@ -73,7 +73,7 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
             JOIN r.tourPackage tourPackage
             LEFT JOIN PaymentEntity p ON p.reservation = r
             WHERE r.active = 1
-              AND r.status <> com.travel.app.enums.ReservationStatus.CANCELADA
+              AND r.status = com.travel.app.enums.ReservationStatus.PAGADA
               AND (
                     r.reservationDate BETWEEN :startDate AND :endDate
                     OR p.createdAt BETWEEN :startDate AND :endDate
