@@ -40,9 +40,9 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
                 person.email,
                 tourPackage.name,
                 tourPackage.destination,
-                COALESCE(r.passengersCount, 0),
-                COALESCE(r.subtotal, 0),
-                COALESCE(r.totalAmount, 0),
+                r.passengersCount,
+                r.subtotal,
+                r.totalAmount,
                 r.status
             )
             FROM ReservationEntity r
@@ -66,8 +66,8 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
                 tourPackage.name,
                 tourPackage.destination,
                 COUNT(r.id),
-                COALESCE(SUM(r.passengersCount), 0),
-                COALESCE(SUM(r.totalAmount), 0)
+                SUM(r.passengersCount),
+                SUM(r.totalAmount)
             )
             FROM ReservationEntity r
             JOIN r.tourPackage tourPackage
@@ -79,7 +79,7 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
                     OR p.createdAt BETWEEN :startDate AND :endDate
               )
             GROUP BY tourPackage.id, tourPackage.name, tourPackage.destination
-            ORDER BY COUNT(r.id) DESC, COALESCE(SUM(r.passengersCount), 0) DESC, tourPackage.name ASC
+            ORDER BY COUNT(r.id) DESC, SUM(r.passengersCount) DESC, tourPackage.name ASC
             """)
     List<PackageRankingReportDTO> findPackageRankingReportByPeriod(@Param("startDate") LocalDateTime startDate,
                                                                    @Param("endDate") LocalDateTime endDate);
