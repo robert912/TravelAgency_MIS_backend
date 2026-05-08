@@ -64,11 +64,12 @@ public class PaymentService {
         // 5. Validar datos de la tarjeta (solo formato, no validación real)
         validateCardData(request);
 
-        // 6. Calcular monto total (precio del paquete * número de pasajeros)
-        // Nota: Necesitas obtener el número de pasajeros de la reserva
-        BigDecimal amount = reservation.getTourPackage().getPrice();
-        // Si tienes un campo passengers en ReservationEntity, úsalo:
-        // BigDecimal amount = reservation.getTourPackage().getPrice().multiply(BigDecimal.valueOf(reservation.getPassengers()));
+        // 6. Calcular monto total registrado en la reserva
+        BigDecimal amount = reservation.getTotalAmount();
+        if (amount == null) {
+            int passengers = reservation.getPassengersCount() != null ? reservation.getPassengersCount() : 1;
+            amount = reservation.getTourPackage().getPrice().multiply(BigDecimal.valueOf(passengers));
+        }
 
         // 7. Crear el pago
         PaymentEntity payment = new PaymentEntity();
