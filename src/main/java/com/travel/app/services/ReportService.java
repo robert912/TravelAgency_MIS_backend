@@ -2,8 +2,7 @@ package com.travel.app.services;
 
 import com.travel.app.dtos.PackageRankingReportDTO;
 import com.travel.app.dtos.SalesReportDTO;
-import com.travel.app.repositories.ReservationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.travel.app.repositories.ReportRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,17 +13,20 @@ import java.util.List;
 @Service
 public class ReportService {
 
-    @Autowired
-    private ReservationRepository reservationRepository;
+    private final ReportRepository reportRepository;
+
+    public ReportService(ReportRepository reportRepository) {
+        this.reportRepository = reportRepository;
+    }
 
     public List<SalesReportDTO> getSalesByPeriod(LocalDate startDate, LocalDate endDate) {
         validateDateRange(startDate, endDate);
-        return reservationRepository.findSalesReportByPeriod(startOfDay(startDate), endOfDay(endDate));
+        return reportRepository.findSalesReportByPeriod(startOfDay(startDate), endOfDay(endDate));
     }
 
     public List<PackageRankingReportDTO> getPackageRankingByPeriod(LocalDate startDate, LocalDate endDate) {
         validateDateRange(startDate, endDate);
-        return reservationRepository.findPackageRankingReportByPeriod(startOfDay(startDate), endOfDay(endDate));
+        return reportRepository.findPackageRankingReportByPeriod(startOfDay(startDate), endOfDay(endDate));
     }
 
     private void validateDateRange(LocalDate startDate, LocalDate endDate) {

@@ -2,13 +2,8 @@ package com.travel.app.services;
 
 import com.travel.app.dtos.PackageRankingReportDTO;
 import com.travel.app.dtos.SalesReportDTO;
-import com.travel.app.repositories.ReservationRepository;
+import com.travel.app.repositories.ReportRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,60 +12,45 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 class ReportServiceTest {
-
-    @Mock
-    private ReservationRepository reservationRepository;
-
-    @InjectMocks
-    private ReportService reportService;
 
     @Test
     void getSalesByPeriodUsesCompleteDayRange() {
         LocalDate startDate = LocalDate.of(2026, 5, 1);
         LocalDate endDate = LocalDate.of(2026, 5, 8);
+        FakeReportRepository reportRepository = new FakeReportRepository();
+        ReportService reportService = new ReportService(reportRepository);
         List<SalesReportDTO> expected = List.of();
-
-        when(reservationRepository.findSalesReportByPeriod(
-                startDate.atStartOfDay(),
-                endDate.atTime(LocalTime.MAX)
-        )).thenReturn(expected);
+        reportRepository.salesReport = expected;
 
         List<SalesReportDTO> result = reportService.getSalesByPeriod(startDate, endDate);
 
         assertEquals(expected, result);
-        verify(reservationRepository).findSalesReportByPeriod(
-                startDate.atStartOfDay(),
-                endDate.atTime(LocalTime.MAX)
-        );
+        assertEquals(startDate.atStartOfDay(), reportRepository.salesStartDate);
+        assertEquals(endDate.atTime(LocalTime.MAX), reportRepository.salesEndDate);
     }
 
     @Test
     void getPackageRankingByPeriodUsesCompleteDayRange() {
         LocalDate startDate = LocalDate.of(2026, 4, 1);
         LocalDate endDate = LocalDate.of(2026, 4, 30);
+        FakeReportRepository reportRepository = new FakeReportRepository();
+        ReportService reportService = new ReportService(reportRepository);
         List<PackageRankingReportDTO> expected = List.of();
-
-        when(reservationRepository.findPackageRankingReportByPeriod(
-                startDate.atStartOfDay(),
-                endDate.atTime(LocalTime.MAX)
-        )).thenReturn(expected);
+        reportRepository.packageRankingReport = expected;
 
         List<PackageRankingReportDTO> result = reportService.getPackageRankingByPeriod(startDate, endDate);
 
         assertEquals(expected, result);
-        verify(reservationRepository).findPackageRankingReportByPeriod(
-                startDate.atStartOfDay(),
-                endDate.atTime(LocalTime.MAX)
-        );
+        assertEquals(startDate.atStartOfDay(), reportRepository.packageRankingStartDate);
+        assertEquals(endDate.atTime(LocalTime.MAX), reportRepository.packageRankingEndDate);
     }
 
     @Test
     void getSalesByPeriodRejectsMissingDates() {
+        ReportService reportService = new ReportService(new FakeReportRepository());
+
         IllegalArgumentException error = assertThrows(
                 IllegalArgumentException.class,
                 () -> reportService.getSalesByPeriod(null, LocalDate.of(2026, 5, 8))
@@ -81,6 +61,8 @@ class ReportServiceTest {
 
     @Test
     void getPackageRankingByPeriodRejectsInvalidDateRange() {
+        ReportService reportService = new ReportService(new FakeReportRepository());
+
         IllegalArgumentException error = assertThrows(
                 IllegalArgumentException.class,
                 () -> reportService.getPackageRankingByPeriod(
@@ -96,13 +78,39 @@ class ReportServiceTest {
     void getSalesByPeriodPassesStartAndEndBoundariesToRepository() {
         LocalDate startDate = LocalDate.of(2026, 1, 15);
         LocalDate endDate = LocalDate.of(2026, 1, 20);
-        ArgumentCaptor<LocalDateTime> startCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
-        ArgumentCaptor<LocalDateTime> endCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
+        FakeReportRepository reportRepository = new FakeReportRepository();
+        ReportService reportService = new ReportService(reportRepository);
 
         reportService.getSalesByPeriod(startDate, endDate);
 
-        verify(reservationRepository).findSalesReportByPeriod(startCaptor.capture(), endCaptor.capture());
-        assertEquals(LocalDateTime.of(2026, 1, 15, 0, 0), startCaptor.getValue());
-        assertEquals(LocalDateTime.of(2026, 1, 20, 23, 59, 59, 999999999), endCaptor.getValue());
+        assertEquals(LocalDateTime.of(2026, 1, 15, 0, 0), reportRepository.salesStartDate);
+        assertEquals(LocalDateTime.of(2026, 1, 20, 23, 59, 59, 999999999), reportRepository.salesEndDate);
+    }
+
+    private static class FakeReportRepository implements ReportRepository {
+
+        private List<SalesReportDTO> salesReport = List.of();
+        private List<PackageRankingReportDTO> packageRankingReport = List.of();
+        private LocalDateTime salesStartDate;
+        private LocalDateTime salesEndDate;
+        private LocalDateTime packageRankingStartDate;
+        private LocalDateTime packageRankingEndDate;
+
+        @Override
+        public List<SalesReportDTO> findSalesReportByPeriod(LocalDateTime startDate, LocalDateTime endDate) {
+            this.salesStartDate = startDate;
+            this.salesEndDate = endDate;
+            return salesReport;
+        }
+
+        @Override
+        public List<PackageRankingReportDTO> findPackageRankingReportByPeriod(
+                LocalDateTime startDate,
+                LocalDateTime endDate
+        ) {
+            this.packageRankingStartDate = startDate;
+            this.packageRankingEndDate = endDate;
+            return packageRankingReport;
+        }
     }
 }

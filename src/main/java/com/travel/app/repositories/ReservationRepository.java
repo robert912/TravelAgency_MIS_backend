@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
+public interface ReservationRepository extends JpaRepository<ReservationEntity, Long>, ReportRepository {
 
     List<ReservationEntity> findByActive(Integer active);
 
