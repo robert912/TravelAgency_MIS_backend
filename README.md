@@ -27,3 +27,23 @@ Una vez levantado el proyecto, puedes ver y probar los endpoints en:
 
 - Asegúrate de que la base de datos esté corriendo antes de iniciar la aplicación
 - El puerto configurado es `8090`
+
+
+## Environment variables
+DB_HOST=localhost;DB_PORT=3306;DB_NAME=dbtravel;DB_USER=root;DB_PASSWORD=12345678;KEYCLOAK_HOST=localhost
+
+## Iniciar la imagen de docker
+```bash
+docker build -t robert912/tourpackage-backend:latest .
+```
+```bash
+docker run -d --name tour-backend ^
+  -p 8090:8090 ^
+  -e DB_HOST=host.docker.internal ^
+  -e DB_PORT=3306 ^
+  -e DB_NAME=dbtravel ^
+  -e DB_USER=root ^
+  -e DB_PASSWORD=12345678 ^
+  -e KEYCLOAK_HOST=host.docker.internal ^
+  robert912/tourpackage-backend
+```

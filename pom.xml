@@ -139,6 +139,7 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<finalName>tourpackage-backend</finalName>
 	</build>
 
 </project>
