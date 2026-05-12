@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/tour-packages/active").permitAll()
                         .requestMatchers("/api/tour-packages/{id}").permitAll()
                         .requestMatchers("/api/tour-packages/{id}/availability").permitAll()
+                        .requestMatchers("/api/travel-types/active").permitAll()
                         .requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated()
