@@ -45,14 +45,5 @@ public class TravelTypeController {
         TravelTypeEntity updatedTravelType = travelTypeService.updateTravelType(travelType);
         return ResponseEntity.ok(updatedTravelType);
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-        boolean isDeactivated = travelTypeService.deleteTravelType(id);
-        if (isDeactivated) {
-            return ResponseEntity.ok("Tipo de viaje con ID " + id + " desactivado correctamente.");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    
 }

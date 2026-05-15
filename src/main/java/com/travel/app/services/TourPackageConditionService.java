@@ -25,16 +25,6 @@ public class TourPackageConditionService {
     @Autowired
     private ConditionService conditionService;
 
-    // Obtener condiciones activas de un paquete específico
-    public List<TourPackageConditionEntity> getActiveConditionsByPackageId(Long packageId) {
-        return tourPackageConditionRepository.findByTourPackageIdAndActive(packageId, 1);
-    }
-
-    // Obtener todas las condiciones de un paquete (activas e inactivas)
-    public List<TourPackageConditionEntity> getAllConditionsByPackageId(Long packageId) {
-        return tourPackageConditionRepository.findByTourPackageId(packageId);
-    }
-
     /**
      * Sincroniza las condiciones de un paquete
      * @param packageId ID del paquete turístico

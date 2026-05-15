@@ -42,18 +42,4 @@ public class TravelTypeService {
         return travelTypeRepository.save(travelType);
     }
 
-    // Borrado lógico (Desactivar)
-    public boolean deleteTravelType(Long id) throws Exception {
-        try {
-            TravelTypeEntity travelType = travelTypeRepository.findById(id).orElse(null);
-            if (travelType != null) {
-                travelType.setActive(0);
-                travelTypeRepository.save(travelType);
-                return true;
-            }
-            return false;
-        } catch (Exception e) {
-            throw new Exception("Error al desactivar el tipo de viaje: " + e.getMessage());
-        }
-    }
 }

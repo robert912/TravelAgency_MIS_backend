@@ -17,18 +17,6 @@ public class TourPackageServiceController {
     @Autowired
     private TourPackageServiceService tourPackageServiceService;
 
-    // Obtener servicios activos de un paquete específico
-    @GetMapping("/package/{packageId}/active")
-    public ResponseEntity<List<TourPackageServiceEntity>> getActiveByPackageId(@PathVariable Long packageId) {
-        return ResponseEntity.ok(tourPackageServiceService.getActiveServicesByPackageId(packageId));
-    }
-
-    // Obtener todos los servicios de un paquete (activos e inactivos)
-    @GetMapping("/package/{packageId}/all")
-    public ResponseEntity<List<TourPackageServiceEntity>> getAllByPackageId(@PathVariable Long packageId) {
-        return ResponseEntity.ok(tourPackageServiceService.getAllServicesByPackageId(packageId));
-    }
-
     // Endpoint para sincronizar servicios
     @PutMapping("/package/{packageId}/sync")
     public ResponseEntity<Map<String, Boolean>> syncServices(

@@ -25,16 +25,6 @@ public class TourPackageRestrictionService {
     @Autowired
     private RestrictionService restrictionService;
 
-    // Obtener restricciones activas de un paquete específico
-    public List<TourPackageRestrictionEntity> getActiveRestrictionsByPackageId(Long packageId) {
-        return tourPackageRestrictionRepository.findByTourPackageIdAndActive(packageId, 1);
-    }
-
-    // Obtener todas las restricciones de un paquete (activas e inactivas)
-    public List<TourPackageRestrictionEntity> getAllRestrictionsByPackageId(Long packageId) {
-        return tourPackageRestrictionRepository.findByTourPackageId(packageId);
-    }
-
     /**
      * Sincroniza las restricciones de un paquete
      * @param packageId ID del paquete turístico

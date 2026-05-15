@@ -13,6 +13,4 @@ public interface TourPackageServiceRepository extends JpaRepository<TourPackageS
     // Buscar por ID de paquete
     List<TourPackageServiceEntity> findByTourPackageId(Long tourPackageId);
 
-    // Buscar por ID de paquete y estado activo
-    List<TourPackageServiceEntity> findByTourPackageIdAndActive(Long tourPackageId, Integer active);
 }

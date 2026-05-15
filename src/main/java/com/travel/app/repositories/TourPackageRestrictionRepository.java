@@ -13,6 +13,4 @@ public interface TourPackageRestrictionRepository extends JpaRepository<TourPack
     // Buscar por ID de paquete
     List<TourPackageRestrictionEntity> findByTourPackageId(Long tourPackageId);
 
-    // Buscar por ID de paquete y estado activo
-    List<TourPackageRestrictionEntity> findByTourPackageIdAndActive(Long tourPackageId, Integer active);
 }

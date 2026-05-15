@@ -17,18 +17,6 @@ public class TourPackageConditionController {
     @Autowired
     private TourPackageConditionService tourPackageConditionService;
 
-    // Obtener condiciones activas de un paquete específico
-    @GetMapping("/package/{packageId}/active")
-    public ResponseEntity<List<TourPackageConditionEntity>> getActiveByPackageId(@PathVariable Long packageId) {
-        return ResponseEntity.ok(tourPackageConditionService.getActiveConditionsByPackageId(packageId));
-    }
-
-    // Obtener todas las condiciones de un paquete
-    @GetMapping("/package/{packageId}/all")
-    public ResponseEntity<List<TourPackageConditionEntity>> getAllByPackageId(@PathVariable Long packageId) {
-        return ResponseEntity.ok(tourPackageConditionService.getAllConditionsByPackageId(packageId));
-    }
-
     // Endpoint para sincronizar condiciones
     @PutMapping("/package/{packageId}/sync")
     public ResponseEntity<Void> syncConditions(

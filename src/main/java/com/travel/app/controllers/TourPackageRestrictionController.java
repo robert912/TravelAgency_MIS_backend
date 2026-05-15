@@ -17,18 +17,6 @@ public class TourPackageRestrictionController {
     @Autowired
     private TourPackageRestrictionService tourPackageRestrictionService;
 
-    // Obtener restricciones activas de un paquete específico
-    @GetMapping("/package/{packageId}/active")
-    public ResponseEntity<List<TourPackageRestrictionEntity>> getActiveByPackageId(@PathVariable Long packageId) {
-        return ResponseEntity.ok(tourPackageRestrictionService.getActiveRestrictionsByPackageId(packageId));
-    }
-
-    // Obtener todas las restricciones de un paquete (activas e inactivas)
-    @GetMapping("/package/{packageId}/all")
-    public ResponseEntity<List<TourPackageRestrictionEntity>> getAllByPackageId(@PathVariable Long packageId) {
-        return ResponseEntity.ok(tourPackageRestrictionService.getAllRestrictionsByPackageId(packageId));
-    }
-
     // Endpoint para sincronizar restricciones
     @PutMapping("/package/{packageId}/sync")
     public ResponseEntity<Map<String, Boolean>> syncRestrictions(

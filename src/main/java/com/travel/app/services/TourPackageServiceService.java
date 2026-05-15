@@ -25,16 +25,6 @@ public class TourPackageServiceService {
     @Autowired
     private ServiceService serviceService;
 
-    // Obtener servicios activos de un paquete específico
-    public List<TourPackageServiceEntity> getActiveServicesByPackageId(Long packageId) {
-        return tourPackageServiceRepository.findByTourPackageIdAndActive(packageId, 1);
-    }
-
-    // Obtener todos los servicios de un paquete (activos e inactivos)
-    public List<TourPackageServiceEntity> getAllServicesByPackageId(Long packageId) {
-        return tourPackageServiceRepository.findByTourPackageId(packageId);
-    }
-
     /**
      * Sincroniza los servicios de un paquete
      * @param packageId ID del paquete turístico
