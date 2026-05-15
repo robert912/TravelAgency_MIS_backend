@@ -42,18 +42,4 @@ public class ServiceService {
         return serviceRepository.save(service);
     }
 
-    // Borrado lógico (Desactivar)
-    public boolean deleteService(Long id) throws Exception {
-        try {
-            ServiceEntity service = serviceRepository.findById(id).orElse(null);
-            if (service != null) {
-                service.setActive(0);
-                serviceRepository.save(service);
-                return true;
-            }
-            return false;
-        } catch (Exception e) {
-            throw new Exception("Error al desactivar el servicio: " + e.getMessage());
-        }
-    }
 }

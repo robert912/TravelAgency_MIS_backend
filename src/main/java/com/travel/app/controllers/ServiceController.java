@@ -46,13 +46,4 @@ public class ServiceController {
         return ResponseEntity.ok(updatedService);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteServiceById(@PathVariable Long id) throws Exception {
-        boolean isDeactivated = serviceService.deleteService(id);
-        if (isDeactivated) {
-            return ResponseEntity.ok("Servicio con ID " + id + " desactivado correctamente.");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }
