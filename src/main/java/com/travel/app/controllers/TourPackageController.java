@@ -93,14 +93,6 @@ public class TourPackageController {
         int totalSlots = tourPackage.getTotalSlots() != null ? tourPackage.getTotalSlots() : 0;
         int reservedSlots = reservationService.countConfirmedPassengersByPackageId(packageId);
         int availableSlots = totalSlots - reservedSlots;
-// 🔥 LOGS PARA DEPURAR
-        System.out.println("=== DEBUG DISPONIBILIDAD ===");
-        System.out.println("Package ID: " + packageId);
-        System.out.println("Total Slots: " + totalSlots);
-        System.out.println("Reserved Slots: " + reservedSlots);
-        System.out.println("Available Slots: " + availableSlots);
-        System.out.println("Requested Quantity: " + quantity);
-        System.out.println("===========================");
 
         Map<String, Object> response = new HashMap<>();
         response.put("totalSlots", totalSlots);
