@@ -79,6 +79,29 @@ public class TourPackageController {
         }
     }
 
+    // Endpoint para consultar disponibilidad de un paquete
+    @GetMapping("/{packageId}/availability")
+    public ResponseEntity<Map<String, Object>> checkAvailability(@PathVariable Long packageId) {
+        TourPackageEntity tourPackage = tourPackageService.getTourPackageById(packageId);
+        if (tourPackage == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        int totalSlots = tourPackage.getTotalSlots() != null ? tourPackage.getTotalSlots() : 0;
+        int reservedSlots = reservationService.countConfirmedPassengersByPackageId(packageId);
+        int availableSlots = totalSlots - reservedSlots;
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("totalSlots", totalSlots);
+        response.put("reservedSlots", reservedSlots);
+        response.put("availableSlots", availableSlots);
+        response.put("isAvailable", availableSlots > 0);
+        response.put("packageName", tourPackage.getName());
+        response.put("destination", tourPackage.getDestination());
+
+        return ResponseEntity.ok(response);
+    }
+
     // Endpoint para verificar si se puede reservar una cantidad específica
     @GetMapping("/{packageId}/availability/check")
     public ResponseEntity<Map<String, Object>> checkAvailabilityForQuantity(
